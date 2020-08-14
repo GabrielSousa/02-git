@@ -22,9 +22,24 @@ function download_datasets {
             bzip2 --decompress "$1/2007.csv.bz2"
         fi
 
+
+        if [[ ! -f "$1/carriers.csv" ]]; then
+            echo "Baixando arquivo carriers"
+            wget -q 'https://dataverse.harvard.edu/api/access/datafile/:persistentId?persistentId=doi:10.7910/DVN/HG7NV7/3NOQ6Q' -O "${1}/carriers.csv"
+        fi
+
+        if [[ ! -f "$1/airports.csv" ]]; then
+            echo "Baixando arquivo airports"
+            wget -q 'https://dataverse.harvard.edu/api/access/datafile/:persistentId?persistentId=doi:10.7910/DVN/HG7NV7/XTPZZY' -O "${1}/airports.csv"
+        fi
+
         exit 0
     else
         echo "Destino do download não existe"
         exit 1
     fi
+}
+
+function list_delayed_companies {
+    exit 0
 }
