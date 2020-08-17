@@ -9,13 +9,18 @@ while getopts ":dy" opt; do
             download_datasets $1
         ;;
         y ) # process option n
-            shift
+            shift      
             if [ -e "data/$1.csv" ] ; then 
-                value=$(awk -F , '{ if (toupper($15) > 0)  print }' data/$1.csv | wc -l) 
-                echo "Em $1 tiveram $value voos atrasados"
+                if [ ! -e "data/atrasados_$1.csv" ] ; then 
+                   awk -F , '{ if (toupper($15) > 0)  print }' data/$1.csv > "data/atrasados_$1.csv"               
+                fi 
+                value=$(cat data/atrasados_$1.csv | wc -l)
             else 
                 echo "Arquivo não existe"
+                exit 1
             fi
+        
+            echo "Em $1 tiveram $value voos atrasados"
         ;;
         \? ) echo "Usage: flight-delays.sh [-d] [-y]"
         ;;
