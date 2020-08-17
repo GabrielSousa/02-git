@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-function download_datasets {
+function load_datasets {
     if [[ -d "$1" ]]; then
         if [[ ! -f "$1/2006.csv" ]]; then
             if [[ ! -f "$1/2006.csv.bz2" ]]; then
@@ -59,8 +59,12 @@ function count_results {
 }
 
 function get_carriers {
-    local present_carriers=($(awk -F',' '{print $9}' | sort | uniq))
+    local present_carriers=($(awk -F',' '{print $9}' | sort | uniq -c))
     #echo ${present_carriers[*]}
     awk -F',' -v pc="${present_carriers[*]}" 'BEGIN{split(pc, codes, " "); for (c in codes) dict[codes[c]]=""} {gsub(/"/,"",$1)} $1 in dict' $1/carriers.csv
+}
 
+function get_airports {
+    local present_airports=($(awk -F',' '{print $18}' | sort | uniq -c))
+    awk -F',' -v pa="${present_airports[*]}" 'BEGIN{split(pa, codes, " "); for (c in codes) dict[codes[c]]=""} {gsub(/"/,"",$1)} $1 in dict' $1/airports.csv
 }

@@ -4,7 +4,7 @@ source functions.sh
 
 command_sequence=""
 
-while getopts ":hy:x:dcX" opt; do
+while getopts ":hy:x:dcXA" opt; do
     case ${opt} in
         h )
             echo "Usage:"
@@ -34,6 +34,9 @@ while getopts ":hy:x:dcX" opt; do
         X )
             command_sequence+=" | get_carriers \$data_path"
             ;;
+        A )
+            command_sequence+=" | get_airports \$data_path"
+            ;;
         : )
             echo "Option -$OPTARG requires an argument."
             exit 1 
@@ -46,7 +49,14 @@ while getopts ":hy:x:dcX" opt; do
 done
 
 data_path=${@:$OPTIND:1}
-download_datasets $data_path
+load_datasets $data_path
 
-echo "cat $data_path/2006.csv | remove_header $command_sequence"
-eval "cat $data_path/2006.csv | remove_header $command_sequence"
+input_data="("
+for csv in $data_path/????.csv; do
+#    echo $csv
+    input_data+="remove_header < $csv;"
+done
+input_data+=")"
+
+#echo "$input_data $command_sequence"
+eval "$input_data $command_sequence"
