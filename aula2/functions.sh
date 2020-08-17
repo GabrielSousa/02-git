@@ -32,14 +32,35 @@ function download_datasets {
             echo "Baixando arquivo airports"
             wget -q 'https://dataverse.harvard.edu/api/access/datafile/:persistentId?persistentId=doi:10.7910/DVN/HG7NV7/XTPZZY' -O "${1}/airports.csv"
         fi
-
-        exit 0
     else
         echo "Destino do download não existe"
         exit 1
     fi
 }
 
-function list_delayed_companies {
-    exit 0
+function remove_header {
+    tail -n +2
+}
+
+function delayed_flights {
+    awk -F',' '$15>0 {print}'
+}
+
+function only_year {
+    awk -F',' -v year=$1 '$1==year {print}'
+}
+
+function only_carrier {
+    awk -F',' -v carrier=$1 '$9==carrier {print}'
+}
+
+function count_results {
+    wc -l
+}
+
+function get_carriers {
+    local present_carriers=($(awk -F',' '{print $9}' | sort | uniq))
+    #echo ${present_carriers[*]}
+    awk -F',' -v pc="${present_carriers[*]}" 'BEGIN{split(pc, codes, " "); for (c in codes) dict[codes[c]]=""} {gsub(/"/,"",$1)} $1 in dict' $1/carriers.csv
+
 }
