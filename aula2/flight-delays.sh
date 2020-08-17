@@ -4,7 +4,7 @@ source functions.sh
 
 command_sequence=""
 
-while getopts ":hy:x:dcX" opt; do
+while getopts ":hy:x:dcXa" opt; do
     case ${opt} in
         h )
             echo "Usage:"
@@ -17,6 +17,7 @@ while getopts ":hy:x:dcX" opt; do
             echo "              -d                         Show only delayed flights."
             echo "              -c                         Count results from previous filters."
             echo "              -X                         Show the unique codes and name of the carriers present in previous filters."
+            echo "              -a                         Show the unique codes and name of the airports present in previous filters."
             exit 0
             ;;
         y )
@@ -33,6 +34,9 @@ while getopts ":hy:x:dcX" opt; do
             ;;
         X )
             command_sequence+=" | get_carriers \$data_path"
+            ;;
+        a )
+            command_sequence+=" | get_airports \$data_path"
             ;;
         : )
             echo "Option -$OPTARG requires an argument."
