@@ -68,3 +68,9 @@ function get_airports {
     local present_airports=($(awk -F',' '{print $18}' | sort | uniq -c))
     awk -F',' -v pa="${present_airports[*]}" 'BEGIN{split(pa, codes, " "); for (c in codes) dict[codes[c]]=""} {gsub(/"/,"",$1)} $1 in dict' $1/airports.csv
 }
+
+function get_airports {
+    local airport_ids=$(awk -F , '{print $17}' | sort | uniq )
+    awk -F',' -v ai="${airport_ids}" 'BEGIN{split(ai, codes, " "); for (c in codes) dict[codes[c]]=""} {gsub(/"/,"",$1)} $1 in dict {print $2}' $1/airports.csv
+
+}

@@ -17,6 +17,7 @@ while getopts ":hy:x:dcXA" opt; do
             echo "              -d                         Show only delayed flights."
             echo "              -c                         Count results from previous filters."
             echo "              -X                         Show the unique codes and name of the carriers present in previous filters."
+            echo "              -A                         Show the unique codes and name of the airports present in previous filters."
             exit 0
             ;;
         y )
