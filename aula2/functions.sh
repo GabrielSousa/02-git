@@ -64,3 +64,9 @@ function get_carriers {
     awk -F',' -v pc="${present_carriers[*]}" 'BEGIN{split(pc, codes, " "); for (c in codes) dict[codes[c]]=""} {gsub(/"/,"",$1)} $1 in dict' $1/carriers.csv
 
 }
+
+function get_airports {
+    local airport_ids=$(awk -F , '{print $17}' | sort | uniq )
+    awk -F',' -v ai="${airport_ids}" 'BEGIN{split(ai, codes, " "); for (c in codes) dict[codes[c]]=""} {gsub(/"/,"",$1)} $1 in dict {print $2}' $1/airports.csv
+
+}
